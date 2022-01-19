@@ -3,31 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="index.css">
+    <style>
+        #info {
+            display: flex;
+            flex-flow: row wrap;
+        }
+    </style>
     <title>caracter</title>
 </head>
-<body>
+<body onload="onLoadUpdate()">
     <header>
         <h1>caracters</h1>
     </header>
     <section>
-        <div id='caracters'>
-            <select name="caracter-list" id="caracter-list">
+        <div id='info'>
+            <select name="caracters" id="caracters" onchange="onUpdate()">
 
             </select>
-            <div id='caracter-info'>
-                <ul id='info'>
-                    <li>caracter name</li>
-                    <li>caracter breed</li>
-                    <li>caracter life</li>
-                    <li>caracter age</li>
-                </ul>
-            </div>
+            <ul id='detail-info'>
+                <li>caracter name</li>
+                <li>caracter breed</li>
+                <li>caracter life</li>
+                <li>caracter age</li>
+            </ul>
         </div>
         <div id='btns'>
             <a class='btn' href="task/creation.html">create new</a>
             <a class='btn' href="task/update.html">update</a>
-            <input class='btn' type="button" value="delete">
+            <input class='btn' type="button" value="delete" onclick="DelCaracter()">
         </div>
     </section>
 </body>
+<script src="index.js"></script>
 </html>
