@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="../index.css">
+    <style>
+        #info {
+            display: flex;
+            flex-flow: row wrap;
+        }
+    </style>
     <title>create caracter</title>
 </head>
 <body onload="onLoadUpdate()">
@@ -10,9 +16,14 @@
         <h1>caracter creation</h1>
     </header>
     <section>
-        <select style='width: 300px; height: 100px;' name="caracters" id="caracters">
+        <div id='info'>
+            <select name="caracters" id="caracters" onchange="onUpdate()">
 
-        </select>
+            </select>
+            <ul id='detail-info'>
+                
+            </ul>
+        </div>
         <p>caracter name: <input type="text" name="caracter-name" id="caracter-name"></p>
         <hr>
         <p>caracter bleed</p>
