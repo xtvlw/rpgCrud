@@ -1,3 +1,4 @@
+//create a json with caracters values, {name, age, breed, id}
 function create() {
     let caracter = {}
     let name = document.querySelector('#caracter-name').value
@@ -19,6 +20,7 @@ function create() {
     console.log(caracter)
 }
 
+//load the caracter to the select tag
 function onLoadUpdate () {
     let select = document.querySelector('#caracters')
     carcs = {
@@ -60,16 +62,30 @@ function onLoadUpdate () {
         op.innerText = carcs[info].name
         select.appendChild(op)
     }
+
 }
 
-function update () {
-
-    let opSelect = document.querySelector('.op')
-    for (op in opSelect) {
-        if (opSelect[op].selected)
+//change to the corrent selected caracter and update the display info
+function onUpdate () {
+    let index = document.getElementById('caracters').selectedIndex
+    let elem = document.getElementById('detail-info')
+    elem.innerHTML = ''
+    let infoCaracter = carcs[index]
+    for (i in infoCaracter) {
+        let inf = document.createElement('li')
+        inf.innerText = `${i}: ${infoCaracter[i]}`
+        elem.appendChild(inf)
     }
+}
 
+//generate a json with the values {name, age, breed, id}
+function update () {
     let caracter = {}
+
+    let opSelect = document.getElementById('caracters').selectedIndex
+    let ops = document.getElementById('caracters').options
+    caracter['id'] = ops[opSelect].id
+
     let name = document.querySelector('#caracter-name').value
     let breed = document.getElementsByName('breed')
     let age = parseInt(document.querySelector('#caracter-age').value)
@@ -86,4 +102,11 @@ function update () {
             caracter['breed'] = breed[arg].id
         }
     }
+}
+
+//get the id to delete the caracter
+function DelCaracter () {
+    let opSelect = document.getElementById('caracters').selectedIndex
+    let ops = document.getElementById('caracters').options
+    let id = ops[opSelect].id
 }
