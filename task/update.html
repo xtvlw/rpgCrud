@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../index.css">
+    <title>create caracter</title>
+</head>
+<body onload="onLoadUpdate()">
+    <header>
+        <h1>caracter creation</h1>
+    </header>
+    <section>
+        <select style='width: 300px; height: 100px;' name="caracters" id="caracters">
+
+        </select>
+        <p>caracter name: <input type="text" name="caracter-name" id="caracter-name"></p>
+        <hr>
+        <p>caracter bleed</p>
+        <p>
+            <label for="human">Human</label><input type="radio" name="breed" id="human">
+            <label for="elf">Elf</label><input type="radio" name="breed" id="elf">
+            <label for="orc">Orc</label><input type="radio" name="breed" id="orc">
+            <label for="goblin">Goblin</label><input type="radio" name="breed" id="goblin">
+        </p>
+        <hr>
+        <p>caracter age: <input type="number" name="caracter-age" id="caracter-age"></p>
+        <hr>
+        <div id='btn-div'>
+            <a class='btn' href="../index.html">Back</a>
+            <input class='btn' type="button" value="clean" onclick="clean()">
+            <input class='btn' type="button" value="update" onclick="update()">
+        </div>
+    </section>
+</body>
+<script>
+    function clean() {
+        let name = document.querySelector('#caracter-name')
+        let age = document.querySelector('#caracter-age')
+        name.value = ''
+        age.value = ''
+    }
+</script>
+<script src="../index.js"></script>
+</html>
