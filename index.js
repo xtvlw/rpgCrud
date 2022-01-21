@@ -1,3 +1,13 @@
+
+const url = new URL('http://0.0.0.0:3000/')
+
+let server = {
+    method: "POST",
+    headers: {
+         "Content-Type": "application/json"
+    }
+}
+
 //create a json with caracters values, {name, age, breed, id}
 function create() {
     let caracter = {}
@@ -8,7 +18,7 @@ function create() {
     if (name == '' || breed == '' || age == 0) {
         alert('insert the caracter informations')
     }
-
+    caracter['user_id'] = 'main'
     caracter['id'] = Math.random().toString()
     caracter['name'] = name
     caracter['age'] = age
@@ -17,44 +27,18 @@ function create() {
             caracter['breed'] = breed[arg].id
         }
     }
-    console.log(caracter)
+    console.log(caracter.age)
+    server['body'] = JSON.stringify(caracter)
+    fetch(url+'create', server)
+        .then(res => {
+            console.log(res)
+        })
 }
 
 //load the caracter to the select tag
 function onLoadUpdate () {
     let select = document.querySelector('#caracters')
-    carcs = {
-        0: {
-            name: 'a',
-            age: 10,
-            breed: 'elf',
-            id: '0.465464654'
-        },
-        1: {
-            name: 'b',
-            age: 13,
-            breed: 'orc',
-            id: '0.46564654'
-        },
-        2: {
-            name: 'c',
-            age: 130,
-            breed: 'elf',
-            id: '0.46ds5464654'
-        },
-        3: {
-            name: 'a',
-            age: 10,
-            breed: 'elf',
-            id: '0.465464654'
-        },
-        4: {
-            name: 'a',
-            age: 10,
-            breed: 'elf',
-            id: '0.465464654'
-        }
-    }
+
     for (info in carcs) {
         let op = document.createElement('option')
         op.setAttribute('id', carcs[info].id)
