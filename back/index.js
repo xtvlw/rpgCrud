@@ -1,10 +1,12 @@
 const cors = require('cors')
 const db = require('mysql')
 const express = require('express')
+const { response } = require('express')
 
 const app = express()
 app.use(cors())
 app.use(express.json())
+
 
 
 app.post('/main', (req, res) => {
@@ -45,48 +47,66 @@ data = {
 
 //create caracter
 
-app.post('/create', (confg, res) => {
-  confg = confg.body
+app.post('/create', (confg, response) => {
+  let caracterConfig = confg.body
 
-  console.log(confg, typeof(confg))
-  con.query(`CREATE TABLE IF NOT EXISTS ${confg.user_id} (id TEXT, name TEXT, bleed TEXT, age INT, life INT)`)
-  con.query(`INSERT INTO ${confg.user_id} VALUES ('${confg.id}', '${confg.name}', '${confg.breed}', ${confg.age}, 100)`)
-  res.json({ status: 'OK' })
+  con.query(`CREATE TABLE IF NOT EXISTS ${caracterConfig.user_id} 
+    (user TEXT, id TEXT, name TEXT, breed TEXT, age INT, life INT)`)
+
+  con.query(`INSERT INTO ${caracterConfig.user_id} VALUES 
+    ('${caracterConfig.user_id}', '${caracterConfig.id}', '${caracterConfig.name}', '${caracterConfig.breed}', ${caracterConfig.age}, 100)`)
+
+  response.json({
+    status: 'OK',
+    name: caracterConfig.name
+  })
 })
 
 //update the caracter
-function update(newConfg) {
-  con.query(`UPDATE ${newConfg.user_id} SET
-      name='${newConfg.name}', bleed='${newConfg.bleed}', 
-      age=${newConfg.age}, life=${newConfg.life}`)
-}
+app.post('/update', (newConfg, res) => {
+  newConfg = newConfg.body
+  con.query(`UPDATE ${newConfg.user_id} SET name='${newConfg.name}', breed='${newConfg.breed}', age=${newConfg.age}, life=100 WHERE id=${newConfg.id}`)
+      console.log('ok')
+      res.json({
+        status: 'OK',
+        name: newConfg.name
+      })
+})
 
 //delete a expecidc caracter of the user
-function destroi (confg) {
-  con.query(`DELETE FROM ${confg.user_id} WHERE id='${confg.id}'`)
-}
+app.post('/delete', (confg, response) => {
+  confg = confg.body
+  console.log(confg)
+  con.query(`DELETE FROM ${confg.user_id} WHERE id=${confg.id}`)
+  response.json({status: 'ok'})
+})
 
 
 
-//return a json with all caracters of the user
+// Return a json with all caracters
 
-function getAll (confg) {
-  let dataCaracter = con.query(`SELECT * FROM ${confg.user_id}`, function (err, res) {
-    if (err) throw err;
-        console.log('ok')
+app.post('/getAll', (confg, response) => {
+  let catacterConfg = confg.body
+  let AllCaractersInfo = {}
+  let dataFromDB = 
+  con.query(`SELECT * FROM ${catacterConfg.user_id}`, 
+    (error, SqlResponse) => {
+      if (error) throw error;
 
-    let result = {}
-    for (dict in res) {
-      let data = res[dict]
-      result[dict] = {
-        id: data.id,
-        name: data.name,
-        bleed: data.bleed,
-        age: data.age,
-        life: data.life
+      for (dataPosition in SqlResponse) {
+          AllCaractersInfo[dataPosition] = {
+            user_id: SqlResponse[dataPosition].user,
+            id: SqlResponse[dataPosition].id,
+            name: SqlResponse[dataPosition].name,
+            breed: SqlResponse[dataPosition].breed,
+            age: SqlResponse[dataPosition].age,
+            life: SqlResponse[dataPosition].life
+        }
       }
-    }
-    console.log(result)
+      console.log(AllCaractersInfo)
+      response.json(AllCaractersInfo)
+    })
   })
-}
+
+
 
