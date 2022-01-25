@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="index.css">
+    <style>
+        #in {
+            text-align: left;
+        }
+        #login-btn {
+            width: 200px;
+        }
+        #inputs {
+            text-align: center;
+        }
+    </style>
+    <title>login page</title>
+</head>
+<body>
+    <header>
+        <h1>Login/register</h1>
+    </header>
+    <section>
+        <div id='in'>
+            <div id='login-elem'>
+                <p>login: <input type="text" name="login" id="login"></p>
+                <p>password: <input type="password" name="pass" id="pass"></p>
+            </div>
+            <div id='inputs' onchange="inChange()">
+                <label for="old-user">Login</label><input type="radio" name="loginOp" id="old-user" checked>
+                <label for="new-user">Create</label><input type="radio" name="loginOp" id="new-user"><br>
+            </div>
+            <input class='btn' type="button" value="Login" onclick="loginCaracter()" id='login-btn'>
+        </div>
+    </section>
+</body>
+<script>
+    function inChange () {
+        let mainDiv = document.getElementById('login-elem')
+        if (document.getElementById('new-user').checked) {
+
+            let button = document.getElementById('login-btn')
+            button.setAttribute('value', 'Create')
+            button.setAttribute('onclick', 'createrCaracter()')
+
+            let p = document.createElement('p')
+            let input = document.createElement('input')
+
+            input.setAttribute('type', 'password')
+            input.setAttribute('id', 'conf-pass')
+
+            p.innerText = 'confirm password: '
+            p.appendChild(input)
+
+            mainDiv.appendChild(p)
+        } else {
+            document.getElementById('login-btn').setAttribute('value', 'Login')
+
+            let p = document.getElementsByTagName('p')
+
+            p = p[p.length-1]
+            p.remove()
+        }
+    }
+</script>
+<script src="./index.js"></script>
+</html>
