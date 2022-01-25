@@ -49,12 +49,26 @@ data = {
 
 app.post('/create', (confg, response) => {
   let caracterConfig = confg.body
-
-  con.query(`CREATE TABLE IF NOT EXISTS ${caracterConfig.user_id} 
+  let life = 0
+  switch (caracterConfig.breed) {
+    case ('human'):
+      life = 100
+    break
+    case ('elf'):
+      life = 150
+    break
+    case ('orc'):
+      life = 200
+    break
+    case ('goblin'):
+      life = 50
+    break
+  }
+  con.query(`CREATE TABLE IF NOT EXISTS ${caracterConfig.user_id}
     (user TEXT, id TEXT, name TEXT, breed TEXT, age INT, life INT)`)
 
   con.query(`INSERT INTO ${caracterConfig.user_id} VALUES 
-    ('${caracterConfig.user_id}', '${caracterConfig.id}', '${caracterConfig.name}', '${caracterConfig.breed}', ${caracterConfig.age}, 100)`)
+    ('${caracterConfig.user_id}', '${caracterConfig.id}', '${caracterConfig.name}', '${caracterConfig.breed}', ${caracterConfig.age}, ${life})`)
 
   response.json({
     status: 'OK',
@@ -88,6 +102,7 @@ app.post('/delete', (confg, response) => {
 app.post('/getAll', (confg, response) => {
   let catacterConfg = confg.body
   let AllCaractersInfo = {}
+  
   let dataFromDB = 
   con.query(`SELECT * FROM ${catacterConfg.user_id}`, 
     (error, SqlResponse) => {
@@ -113,6 +128,8 @@ app.post('/createUser', (user, response) => {
   let userInfo = user.body
   con.query(`CREATE TABLE IF NOT EXISTS users (login TEXT, password TEXT, user_id TEXT)`)
   con.query(`INSERT INTO users VALUES ('${userInfo.login}', '${userInfo.password}', '${userInfo.user_id}')`)
+  con.query(`CREATE TABLE IF NOT EXISTS ${userInfo.user_id}
+  (user TEXT, id TEXT, name TEXT, breed TEXT, age INT, life INT)`)
   response.json({staus: 'ok'})
 })
 
