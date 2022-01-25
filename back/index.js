@@ -109,4 +109,30 @@ app.post('/getAll', (confg, response) => {
   })
 
 
+app.post('/createUser', (user, response) => {
+  let userInfo = user.body
+  con.query(`CREATE TABLE IF NOT EXISTS users (login TEXT, password TEXT, user_id TEXT)`)
+  con.query(`INSERT INTO users VALUES ('${userInfo.login}', '${userInfo.password}', '${userInfo.user_id}')`)
+  response.json({staus: 'ok'})
+})
 
+app.post('/loginUser', (user, response) => {
+  let userInfo = user.body
+  
+  let id = con.query(`SELECT user_id FROM users WHERE login='${userInfo.login}' AND password='${userInfo.password}'`, 
+  (error, login) => {
+    if (error) throw error
+      
+    try { 
+      response.json({
+        user_id: login[0].user_id,
+        status: 'ok'
+      })
+    } catch (err) {
+      response.json({
+        status: 'error',
+        reason: 'noUser'
+      })
+    }
+  })
+})
