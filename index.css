@@ -21,6 +21,9 @@ select {
     border: black;
     background-color: white;
 }
+ul {
+    text-align: left;
+}
 .btn {
     background-color: #6bd0ff;
     border: none;
