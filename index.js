@@ -1,7 +1,7 @@
 
 const url = new URL('http://0.0.0.0:3000/')
 
-let dataUser = {}
+
 
 let server = {
     method: "POST",
@@ -14,6 +14,7 @@ let server = {
 
 //create a json with caracters values, {name, age, breed, id}
 function create() {
+    let dataUser = JSON.parse(localStorage.getItem('user'))
     let caracter = {}
     let name = document.querySelector('#caracter-name').value
     let breed = document.getElementsByName('breed')
@@ -22,7 +23,7 @@ function create() {
     if (name == '' || breed == '' || age == 0) {
         alert('insert the caracter informations')
     }
-    caracter['user_id'] = 'main'
+    caracter['user_id'] = dataUser.user
     caracter['id'] = Math.random().toString()
     caracter['name'] = name
     caracter['age'] = age
@@ -40,6 +41,7 @@ function create() {
 
 //load the caracter to the select tag
 function loadCaracters () {
+    let dataUser = JSON.parse(localStorage.getItem('user'))
     let selectElem = document.querySelector('#caracters')
     fetch(url+'getAll', server)
         .then(server => server.json())
@@ -111,4 +113,54 @@ function DelCaracter () {
         .then(alert('DELETED'))
 
     location.reload()
+}
+
+
+
+function createrCaracter () {
+    let loginText = document.querySelector('#login').value
+    let passwordText = document.querySelector('#pass').value
+    let confirmPassText = document.querySelector('#conf-pass').value
+    
+    if (loginText == '' || passwordText == '' || confirmPassText == '') {
+        alert('insert data!')
+    } else if (passwordText != confirmPassText) {
+        alert("password don't met!")
+    } else {
+        let newUser = {
+            login: loginText,
+            password: passwordText,
+            user_id: Math.random().toString()
+        }
+        server['body'] = JSON.stringify(newUser)
+        fetch(url+'createUser', server)
+            .then(response => response.json())
+            .then(alert('user created'))
+    }
+    location.reload()
+}
+
+function loginCaracter () {
+    let loginText = document.querySelector('#login').value
+    let passwordText = document.querySelector('#pass').value
+    if (loginText == '' || passwordText == '') {
+        alert('insert data!')
+    } else {
+        let user = {
+            login: loginText,
+            password: passwordText
+        }
+        server['body'] = JSON.stringify(user)
+        fetch(url+'loginUser', server)
+            .then(response => response.json())
+            .then(data => {
+                if (data.status == 'error') {
+                    alert('user not foud!')
+                } else {
+                    dataUser = {user: data.user_id}
+                    let localstorage = localStorage.setItem('user', json.stringify(dataUser))
+                }
+            })
+    }
+   window.location.href='./index.html'
 }
