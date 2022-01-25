@@ -2,19 +2,18 @@
 const url = new URL('http://0.0.0.0:3000/')
 
 
-
+let dataUser
 let server = {
     method: "POST",
     headers: {
          "Content-Type": "application/json"
-    },
-    body: JSON.stringify({user_id: 'main'})
+    }
 }
 
 
 //create a json with caracters values, {name, age, breed, id}
 function create() {
-    let dataUser = JSON.parse(localStorage.getItem('user'))
+    let dataUser = localStorage.getItem('user')
     let caracter = {}
     let name = document.querySelector('#caracter-name').value
     let breed = document.getElementsByName('breed')
@@ -23,7 +22,7 @@ function create() {
     if (name == '' || breed == '' || age == 0) {
         alert('insert the caracter informations')
     }
-    caracter['user_id'] = dataUser.user
+    caracter['user_id'] = localStorage.getItem('user').toString()
     caracter['id'] = Math.random().toString()
     caracter['name'] = name
     caracter['age'] = age
@@ -41,19 +40,20 @@ function create() {
 
 //load the caracter to the select tag
 function loadCaracters () {
-    let dataUser = JSON.parse(localStorage.getItem('user'))
+    let dataUser = localStorage.getItem('user')
     let selectElem = document.querySelector('#caracters')
+
+    server['body'] = JSON.stringify({user_id: dataUser})
     fetch(url+'getAll', server)
         .then(server => server.json())
         .then(caractersConfg => {
-            dataUser = caractersConfg
-            console.log(dataUser)
             for (caracter in caractersConfg){
                 let optionElem = document.createElement('option')
                 optionElem.setAttribute('id', caractersConfg[caracter].id)
                 optionElem.innerText = caractersConfg[caracter].name
                 selectElem.appendChild(optionElem)
-        }
+        } 
+        localStorage.setItem('userData', JSON.stringify(caractersConfg))
     })
 }
 
@@ -63,7 +63,8 @@ function onUpdate () {
     let listElem = document.getElementById('detail-info')
     listElem.innerHTML = ''
 
-    let infoCaracter = dataUser[selectIndex]
+    let infoCaracter = JSON.parse(localStorage.getItem('userData'))[selectIndex]
+
     for (i in infoCaracter) {
         let inf = document.createElement('li')
         inf.innerText = `${i}: ${infoCaracter[i]}`
@@ -90,7 +91,7 @@ function update () {
     newCaracter['age'] = newAge
     newCaracter['name'] = newName
     newCaracter['id'] = caracterId
-    newCaracter['user_id'] = dataUser.user_id
+    newCaracter['user_id'] = localStorage.getItem('user')
 
     // sending to the server
     server.body = JSON.stringify(newCaracter)
@@ -105,9 +106,8 @@ function DelCaracter () {
     let idElem = document.querySelector('#caracters')
     let id = {
         id: idElem.options[idElem.selectedIndex].id,
-        user_id: dataUser[0].user_id
+        user_id: localStorage.getItem('user')
     }
-    console.log(id)
     server['body'] = JSON.stringify(id)
     fetch(url+'delete', server)
         .then(alert('DELETED'))
@@ -130,7 +130,7 @@ function createrCaracter () {
         let newUser = {
             login: loginText,
             password: passwordText,
-            user_id: Math.random().toString()
+            user_id: ('user'+Math.random()).replace('.', '')
         }
         server['body'] = JSON.stringify(newUser)
         fetch(url+'createUser', server)
@@ -157,10 +157,10 @@ function loginCaracter () {
                 if (data.status == 'error') {
                     alert('user not foud!')
                 } else {
-                    dataUser = {user: data.user_id}
-                    let localstorage = localStorage.setItem('user', json.stringify(dataUser))
+                    localStorage.setItem('user', data.user_id)
+                    window.location.href='./index.html'
                 }
             })
     }
-   window.location.href='./index.html'
+   
 }
